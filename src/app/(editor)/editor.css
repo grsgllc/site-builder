@@ -1,10 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: saas-theme;
+  themes: saas;
 }
 
 @plugin "daisyui/theme" {
-  name: "saas-theme";
+  name: "saas";
   default: false;
   prefersdark: false;
   color-scheme: "light";

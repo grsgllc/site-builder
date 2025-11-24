@@ -12,24 +12,29 @@ export default async function EditorPage({
   const { siteId } = await params;
 
   if (!session?.user?.id) {
-    redirect("/");
+    return redirect("/");
   }
 
   const site = await getSite(siteId);
 
   if (!site) {
-    redirect("/dashboard");
+    return redirect("/dashboard");
   }
 
   // Check if user has access (owner or collaborator)
   const isOwner = site.userId === session.user.id;
   const isCollaborator = site.collaborators.some(
-    (c) => c.userId === session.user.id
+    (c) => c.userId === session?.user?.id
   );
 
   if (!isOwner && !isCollaborator) {
-    redirect("/dashboard");
+    return redirect("/dashboard");
   }
 
-  return <EditorLayout site={site} user={session.user} />;
+  return (
+    <EditorLayout
+      site={site}
+      user={session.user}
+    />
+  );
 }
