@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(npm install:*)",
-      "Bash(npx prisma generate:*)"
+      "Bash(npx prisma generate:*)",
+      "Bash(dir /s /b srcapp 2)",
+      "Bash(nul)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []

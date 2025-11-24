@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { H1 } from "@/components/Core";
 import toast from "react-hot-toast";
+import TemplateSelectionModal from "@/components/TemplateSelectionModal";
 
 export default function NewSitePage() {
   const router = useRouter();
@@ -15,6 +16,10 @@ export default function NewSitePage() {
     boolean | null
   >(null);
   const [checkingSubdomain, setCheckingSubdomain] = useState(false);
+  const [showTemplateModal, setShowTemplateModal] = useState(true);
+  const [selectedLayoutId, setSelectedLayoutId] = useState<string | null>(null);
+  const [selectedLayoutName, setSelectedLayoutName] = useState<string>("");
+  const [templateSelected, setTemplateSelected] = useState(false);
 
   const checkSubdomain = async (value: string) => {
     if (!value || value.length < 3) {
@@ -49,6 +54,17 @@ export default function NewSitePage() {
     checkSubdomain(cleaned);
   };
 
+  const handleTemplateSelect = (layoutId: string | null, layoutName: string) => {
+    setSelectedLayoutId(layoutId);
+    setSelectedLayoutName(layoutName);
+    setTemplateSelected(true);
+    setShowTemplateModal(false);
+  };
+
+  const handleTemplateModalClose = () => {
+    router.back();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -66,6 +82,7 @@ export default function NewSitePage() {
           subdomain,
           name,
           description,
+          layoutId: selectedLayoutId,
         }),
       });
 
@@ -85,13 +102,28 @@ export default function NewSitePage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
-      <H1>Create New Site</H1>
+    <>
+      <TemplateSelectionModal
+        isOpen={showTemplateModal}
+        onSelect={handleTemplateSelect}
+        onClose={handleTemplateModalClose}
+      />
 
-      <form
-        onSubmit={handleSubmit}
-        className="mt-8 border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
-      >
+      <div className="container mx-auto px-4 py-8 max-w-2xl">
+        <H1>Create New Site</H1>
+
+        {templateSelected && (
+          <div className="mt-4 border-4 border-black bg-yellow-300 p-4">
+            <p className="font-mono font-bold">
+              Template Selected: {selectedLayoutName}
+            </p>
+          </div>
+        )}
+
+        <form
+          onSubmit={handleSubmit}
+          className="mt-8 border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+        >
         <div className="space-y-6">
           <div>
             <label className="block text-lg font-bold font-mono mb-2">
@@ -174,6 +206,7 @@ export default function NewSitePage() {
           </div>
         </div>
       </form>
-    </div>
+      </div>
+    </>
   );
 }
