@@ -60,7 +60,7 @@ export default async function RootLayout({
           signOut={handleSignOut}
           createPortalSession={handleCreatePortalSession}
         />
-        <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
         <Toaster position="bottom-center" />
       </body>

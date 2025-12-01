@@ -6,6 +6,38 @@ import Link from "next/link";
 import { IoFilterSharp } from "react-icons/io5";
 import { FaSort } from "react-icons/fa";
 
+function DashboardToolbar() {
+  /* return (
+    <ul className="menu menu-horizontal menu-lg">
+      <li>
+        <IoFilterSharp />
+      </li>
+      <li>
+        <FaSort />
+      </li>
+      <li>
+        <Link href="/dashboard/new">+</Link>
+      </li>
+    </ul>
+  ); */
+  return (
+    <div className="grid grid-cols-3 gap-6 w-full justify-center mb-2 px-8">
+      <button className="btn btn-primary btn-ghost btn-xl border-4 border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-bold font-mono md:text-lg xl:text-2xl xl:p-6 mt-2">
+        <IoFilterSharp />
+      </button>
+      <button className="btn btn-primary btn-ghost btn-xl border-4 border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-bold font-mono md:text-lg xl:text-2xl xl:p-6 mt-2">
+        <FaSort />
+      </button>
+      <Link
+        href="/dashboard/new"
+        className="btn btn-primary btn-ghost btn-xl border-4 border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-bold font-mono md:text-lg xl:text-2xl xl:p-6 mt-2"
+      >
+        +
+      </Link>
+    </div>
+  );
+}
+
 export default async function DashboardPage() {
   const session = await auth();
 
@@ -24,22 +56,8 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      {/* Toolbar */}
-      <div className="flex gap-4 mb-8 flex-wrap">
-        <button className="btn btn-primary btn-ghost btn-xl border-4 border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-bold font-mono md:text-lg xl:text-2xl xl:p-6 mt-2">
-          <IoFilterSharp />
-        </button>
-        <button className="btn btn-primary btn-ghost btn-xl border-4 border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-bold font-mono md:text-lg xl:text-2xl xl:p-6 mt-2">
-          <FaSort />
-        </button>
-        <Link
-          href="/dashboard/new"
-          className="btn btn-primary btn-ghost btn-xl border-4 border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-bold font-mono md:text-lg xl:text-2xl xl:p-6 mt-2"
-        >
-          +
-        </Link>
-      </div>
+    <div className="flex flex-col">
+      <DashboardToolbar />
 
       {/* Sites List */}
       {allSites.length === 0 ? (
@@ -50,7 +68,7 @@ export default async function DashboardPage() {
           </p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="flex flex-col md:flex-row gap-6">
           {allSites.map((site) => (
             <SiteCard key={site.id} site={site} isOwner={site.isOwner} />
           ))}
