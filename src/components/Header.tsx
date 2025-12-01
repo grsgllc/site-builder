@@ -35,14 +35,7 @@ export default function Header({
             </label>
           </div>
           <div className="ml-auto mr-[37%] my-auto md:mx-4">
-            <Link href="/">
-              <Image
-                src="/logo.png"
-                alt="stickerch.art"
-                width={100}
-                height={100}
-              />
-            </Link>
+            <Link href="/">SiteForge</Link>
           </div>
           {/* Desktop Header */}
           <div className="flex-row w-full gap-4 justify-end hidden md:flex pr-4">

@@ -7,7 +7,7 @@ import { auth, signOut } from "@/lib/auth";
 import { createPortalSession } from "@/lib/stripe";
 import { UserDetails } from "@/types";
 import { redirect } from "next/navigation";
-import "./main.css";
+import "../../global.css";
 
 export const metadata = getSEOTags();
 
@@ -51,10 +51,7 @@ export default async function RootLayout({
       }
     : undefined;
   return (
-    <html
-      lang="en"
-      data-theme="saas"
-    >
+    <html lang="en" data-theme="saas">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-base-200 flex flex-col min-h-svh`}
       >

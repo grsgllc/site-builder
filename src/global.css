@@ -1,0 +1,85 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: saas;
+}
+
+@plugin "daisyui/theme" {
+  name: "saas";
+  default: false;
+  prefersdark: false;
+  color-scheme: "dark";
+  --color-base-100: oklch(12% 0.042 264.695);
+  --color-base-200: oklch(20% 0.042 265.755);
+  --color-base-300: oklch(27% 0.041 260.031);
+  --color-base-content: oklch(96% 0.007 247.896);
+  --color-primary: oklch(78% 0.115 274.713);
+  --color-primary-content: oklch(25% 0.09 281.288);
+  --color-secondary: oklch(87% 0.15 154.449);
+  --color-secondary-content: oklch(26% 0.065 152.934);
+  --color-accent: oklch(82% 0.12 346.018);
+  --color-accent-content: oklch(28% 0.109 3.907);
+  --color-neutral: oklch(44% 0.043 257.281);
+  --color-neutral-content: oklch(98% 0.003 247.858);
+  --color-info: oklch(78% 0.154 211.53);
+  --color-info-content: oklch(30% 0.056 229.695);
+  --color-success: oklch(77% 0.152 181.912);
+  --color-success-content: oklch(27% 0.046 192.524);
+  --color-warning: oklch(75% 0.183 55.934);
+  --color-warning-content: oklch(26% 0.079 36.259);
+  --color-error: oklch(71% 0.194 13.428);
+  --color-error-content: oklch(27% 0.105 12.094);
+  --radius-selector: 0.5rem;
+  --radius-field: 0rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 1;
+}
+
+html,
+body {
+  scroll-behavior: smooth !important;
+}
+
+/* It makes the HTML progress bar filling smooth when value change. */
+progress::-webkit-progress-value {
+  transition: 0.6s width ease-out;
+}
+
+.markdown {
+  @apply leading-relaxed text-lg xl:text-xl;
+}
+
+.markdown a {
+  @apply text-accent underline;
+}
+
+.markdown p,
+.markdown blockquote {
+  @apply mt-6;
+}
+
+.markdown ul,
+.markdown ol {
+  @apply my-2;
+}
+
+.markdown ul {
+  @apply list list-disc list-inside;
+}
+
+.markdown h2 {
+  @apply text-3xl xl:text-4xl mt-12 mb-4 font-bold leading-snug;
+}
+
+.markdown h3 {
+  @apply text-2xl mt-8 mb-4 leading-snug;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
