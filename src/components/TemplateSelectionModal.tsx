@@ -59,7 +59,7 @@ export default function TemplateSelectionModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white border-8 border-black shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="bg-black border-8 border-white max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="border-b-8 border-black bg-yellow-300 p-6">
           <h2 className="text-4xl font-black font-mono uppercase">

@@ -38,6 +38,15 @@ function DashboardToolbar() {
   );
 }
 
+function NoSitesFound() {
+  return (
+    <div className="text-center py-16">
+      <p className="text-2xl font-bold font-mono mb-4">No sites yet</p>
+      <p className="text-lg font-mono">Click the + to get started</p>
+    </div>
+  );
+}
+
 export default async function DashboardPage() {
   const session = await auth();
 
@@ -61,16 +70,15 @@ export default async function DashboardPage() {
 
       {/* Sites List */}
       {allSites.length === 0 ? (
-        <div className="text-center py-16 border-4 border-black bg-yellow-300">
-          <p className="text-2xl font-bold font-mono mb-4">No sites yet</p>
-          <p className="text-lg font-mono">
-            Create your first site to get started
-          </p>
-        </div>
+        <NoSitesFound />
       ) : (
         <div className="flex flex-col md:flex-row gap-6">
           {allSites.map((site) => (
-            <SiteCard key={site.id} site={site} isOwner={site.isOwner} />
+            <SiteCard
+              key={site.id}
+              site={site}
+              isOwner={site.isOwner}
+            />
           ))}
         </div>
       )}
