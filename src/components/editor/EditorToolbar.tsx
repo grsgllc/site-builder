@@ -29,16 +29,14 @@ export function EditorToolbar({
       <div className="flex items-center gap-4">
         <Link
           href="/dashboard"
-          className="text-white font-mono font-bold hover:text-yellow-300 transition-colors"
+          className="text-white  font-bold hover:text-yellow-300 transition-colors"
         >
           ← Dashboard
         </Link>
         <div className="h-8 w-px bg-gray-600" />
-        <h1 className="text-white font-mono font-bold text-lg">
-          {siteName}
-        </h1>
+        <h1 className="text-white  font-bold text-lg">{siteName}</h1>
         <span
-          className={`px-2 py-1 text-xs font-bold font-mono border-2 ${
+          className={`px-2 py-1 text-xs font-bold  border-2 ${
             published
               ? "bg-green-400 border-green-600"
               : "bg-gray-400 border-gray-600"
@@ -54,7 +52,7 @@ export function EditorToolbar({
             href={`https://${subdomain}.yourapp.com`}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 bg-white text-black font-mono font-bold border-2 border-white hover:bg-gray-200 transition-colors"
+            className="px-4 py-2 bg-white text-black  font-bold border-2 border-white hover:bg-gray-200 transition-colors"
           >
             View Live
           </a>
@@ -63,16 +61,16 @@ export function EditorToolbar({
         <button
           onClick={handleSave}
           disabled={saving}
-          className="px-4 py-2 bg-yellow-400 text-black font-mono font-bold border-2 border-yellow-600 hover:bg-yellow-300 transition-colors disabled:opacity-50"
+          className="px-4 py-2 bg-yellow-400 text-black  font-bold border-2 border-yellow-600 hover:bg-yellow-300 transition-colors disabled:opacity-50"
         >
           {saving ? "Saving..." : "Save"}
         </button>
 
-        <button className="px-4 py-2 bg-blue-500 text-white font-mono font-bold border-2 border-blue-700 hover:bg-blue-400 transition-colors">
+        <button className="px-4 py-2 bg-blue-500 text-white  font-bold border-2 border-blue-700 hover:bg-blue-400 transition-colors">
           Preview
         </button>
 
-        <button className="px-4 py-2 bg-red-500 text-white font-mono font-bold border-2 border-red-700 hover:bg-red-400 transition-colors">
+        <button className="px-4 py-2 bg-red-500 text-white  font-bold border-2 border-red-700 hover:bg-red-400 transition-colors">
           Publish
         </button>
       </div>

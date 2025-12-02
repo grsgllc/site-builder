@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronLeft } from "lucide-react";
+import { FaChevronLeft } from "react-icons/fa";
 
 interface Layout {
   id: string;
@@ -61,18 +61,18 @@ export default function TemplateSelectionPage({
       : layouts.filter((l) => (l.category || "Other") === filter);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       {/* Header */}
-      <div className="border-b-4 border-black bg-white p-6">
+      <div className="border-b-4 border-black p-6">
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={onBack}
             className="flex items-center justify-center w-10 h-10 hover:bg-gray-100 transition-colors"
             aria-label="Go back"
           >
-            <ChevronLeft size={28} className="font-bold" strokeWidth={3} />
+            <FaChevronLeft size={28} className="font-bold" strokeWidth={3} />
           </button>
-          <h1 className="text-3xl font-black font-mono uppercase">Templates</h1>
+          <h1 className="text-3xl font-black  uppercase">Templates</h1>
         </div>
 
         {/* Filter Dropdown */}
@@ -80,7 +80,7 @@ export default function TemplateSelectionPage({
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="select select-bordered w-full border-2 border-black font-mono font-bold text-base bg-white"
+            className="select select-bordered w-full border-2 border-black  font-bold text-base bg-white"
           >
             {categories.map((cat) => (
               <option key={cat} value={cat}>
@@ -92,10 +92,13 @@ export default function TemplateSelectionPage({
       </div>
 
       {/* Template List */}
-      <div className="p-6 overflow-y-auto" style={{ height: "calc(100vh - 180px)" }}>
+      <div
+        className="p-6 overflow-y-auto"
+        style={{ height: "calc(100vh - 180px)" }}
+      >
         {loading ? (
           <div className="flex items-center justify-center h-64">
-            <p className="text-2xl font-mono font-bold">Loading templates...</p>
+            <p className="text-2xl  font-bold">Loading templates...</p>
           </div>
         ) : (
           <div className="space-y-4 max-w-4xl">
@@ -113,14 +116,14 @@ export default function TemplateSelectionPage({
                   <span className="text-5xl">⬜</span>
                 </div>
                 <div className="flex-1 pt-2">
-                  <h3 className="text-2xl font-black font-mono uppercase mb-2">
+                  <h3 className="text-2xl font-black  uppercase mb-2">
                     Blank Site
                   </h3>
-                  <p className="font-mono text-base text-gray-700 mb-3">
+                  <p className=" text-base text-gray-700 mb-3">
                     Start from scratch with a completely empty canvas
                   </p>
                   {selectedLayoutId === null && (
-                    <div className="inline-block bg-black text-white px-3 py-1 font-mono font-bold text-sm">
+                    <div className="inline-block bg-black text-white px-3 py-1  font-bold text-sm">
                       ✓ SELECTED
                     </div>
                   )}
@@ -155,21 +158,22 @@ export default function TemplateSelectionPage({
                     <div className="flex-1 pt-2">
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <h3 className="text-2xl font-black font-mono uppercase mb-2">
+                          <h3 className="text-2xl font-black  uppercase mb-2">
                             {layout.name}
                           </h3>
-                          <p className="font-mono text-base text-gray-700 mb-3">
-                            {layout.description || "Pre-designed layout template"}
+                          <p className=" text-base text-gray-700 mb-3">
+                            {layout.description ||
+                              "Pre-designed layout template"}
                           </p>
                         </div>
                         {layout.isDefault && (
-                          <div className="bg-black text-white px-3 py-1 text-xs font-mono font-bold flex-shrink-0 mt-1">
+                          <div className="bg-black text-white px-3 py-1 text-xs  font-bold flex-shrink-0 mt-1">
                             DEFAULT
                           </div>
                         )}
                       </div>
                       {selectedLayoutId === layout.id && (
-                        <div className="inline-block bg-black text-white px-3 py-1 font-mono font-bold text-sm">
+                        <div className="inline-block bg-black text-white px-3 py-1  font-bold text-sm">
                           ✓ SELECTED
                         </div>
                       )}
@@ -179,7 +183,7 @@ export default function TemplateSelectionPage({
               ))
             ) : (
               <div className="text-center py-12">
-                <p className="text-xl font-mono text-gray-500">
+                <p className="text-xl  text-gray-500">
                   No templates found in this category
                 </p>
               </div>

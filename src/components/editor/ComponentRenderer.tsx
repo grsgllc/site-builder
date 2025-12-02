@@ -53,13 +53,15 @@ export function ComponentRenderer({
             <img
               src={props.src}
               alt={props.alt || "Image"}
-              style={{ width: "100%", height: "100%", objectFit: props.objectFit }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: props.objectFit,
+              }}
             />
           ) : (
             <div className="w-full h-full bg-gray-300 flex items-center justify-center">
-              <span className="font-mono font-bold text-gray-600">
-                No image
-              </span>
+              <span className=" font-bold text-gray-600">No image</span>
             </div>
           )}
         </div>
@@ -77,10 +79,8 @@ export function ComponentRenderer({
             fontWeight: props.fontWeight,
             borderStyle: "solid",
           }}
-          className="px-6 py-3 font-mono shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
-          onClick={
-            isEditor ? (e) => e.preventDefault() : undefined
-          }
+          className="px-6 py-3  shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+          onClick={isEditor ? (e) => e.preventDefault() : undefined}
         >
           {props.text}
         </button>
@@ -99,9 +99,7 @@ export function ComponentRenderer({
             />
           ) : (
             <div className="w-full h-48 bg-gray-300 flex items-center justify-center">
-              <span className="font-mono font-bold text-gray-600">
-                No video
-              </span>
+              <span className=" font-bold text-gray-600">No video</span>
             </div>
           )}
         </div>
@@ -122,7 +120,7 @@ export function ComponentRenderer({
             ))
           ) : (
             <div className="col-span-3 p-8 bg-gray-200 text-center">
-              <span className="font-mono font-bold">Empty Gallery</span>
+              <span className=" font-bold">Empty Gallery</span>
             </div>
           )}
         </div>
@@ -132,7 +130,7 @@ export function ComponentRenderer({
       return (
         <div className="border-4 border-black bg-white p-4">
           <div className="aspect-video bg-gray-300 flex items-center justify-center">
-            <span className="font-mono font-bold">Carousel Placeholder</span>
+            <span className=" font-bold">Carousel Placeholder</span>
           </div>
         </div>
       );
@@ -144,9 +142,7 @@ export function ComponentRenderer({
             <div dangerouslySetInnerHTML={{ __html: props.embedCode }} />
           ) : (
             <div className="aspect-video bg-gray-900 flex items-center justify-center">
-              <span className="font-mono font-bold text-white">
-                No embed code
-              </span>
+              <span className=" font-bold text-white">No embed code</span>
             </div>
           )}
         </div>
@@ -155,7 +151,7 @@ export function ComponentRenderer({
     case "animated-text":
       return (
         <div
-          className="p-4 font-mono font-bold text-4xl"
+          className="p-4  font-bold text-4xl"
           style={{ color: props.color || "#000" }}
         >
           {props.content || "Animated Text"}
@@ -168,16 +164,14 @@ export function ComponentRenderer({
           className="border-4 border-black p-8 bg-gradient-to-b from-purple-500 to-pink-500"
           style={{ minHeight: "300px" }}
         >
-          <div className="font-mono font-bold text-white text-2xl">
-            Parallax Section
-          </div>
+          <div className=" font-bold text-white text-2xl">Parallax Section</div>
         </div>
       );
 
     case "particles":
       return (
         <div className="border-4 border-black bg-black p-8 relative overflow-hidden">
-          <div className="font-mono font-bold text-white text-2xl relative z-10">
+          <div className=" font-bold text-white text-2xl relative z-10">
             Particle Background
           </div>
         </div>
@@ -186,7 +180,7 @@ export function ComponentRenderer({
     default:
       return (
         <div className="p-4 border-2 border-dashed border-gray-400 bg-gray-100">
-          <span className="font-mono text-sm">Unknown: {type}</span>
+          <span className=" text-sm">Unknown: {type}</span>
         </div>
       );
   }

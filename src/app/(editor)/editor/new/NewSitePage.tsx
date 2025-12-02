@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import TemplateSelectionPage from "@/components/TemplateSelectionPage";
+import TemplateSelectionPage from "./TemplateSelectionPage";
 
 export default function NewSitePage() {
   const router = useRouter();
@@ -119,7 +119,7 @@ export default function NewSitePage() {
         <button
           type="button"
           onClick={handleBackToTemplates}
-          className="text-left font-mono font-bold text-lg hover:underline flex items-center gap-2"
+          className="text-left  font-bold text-lg hover:underline flex items-center gap-2"
         >
           ← Change Template
         </button>
@@ -127,9 +127,7 @@ export default function NewSitePage() {
 
       {templateSelected && (
         <div className="mb-6 border-4 border-black bg-yellow-300 p-4">
-          <p className="font-mono font-bold">
-            Template Selected: {selectedLayoutName}
-          </p>
+          <p className=" font-bold">Template Selected: {selectedLayoutName}</p>
         </div>
       )}
 
@@ -139,23 +137,19 @@ export default function NewSitePage() {
       >
         <div className="space-y-6">
           <div>
-            <label className="block text-lg font-bold font-mono mb-2">
-              Site Name
-            </label>
+            <label className="block text-lg font-bold  mb-2">Site Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="input input-bordered w-full border-2 border-black font-mono"
+              className="input input-bordered w-full border-2 border-black "
               placeholder="My Awesome Site"
             />
           </div>
 
           <div>
-            <label className="block text-lg font-bold font-mono mb-2">
-              Subdomain
-            </label>
+            <label className="block text-lg font-bold  mb-2">Subdomain</label>
             <div className="flex items-center gap-2">
               <input
                 type="text"
@@ -163,39 +157,39 @@ export default function NewSitePage() {
                 onChange={(e) => handleSubdomainChange(e.target.value)}
                 required
                 minLength={3}
-                className="input input-bordered flex-1 border-2 border-black font-mono"
+                className="input input-bordered flex-1 border-2 border-black "
                 placeholder="mysite"
               />
-              <span className="font-mono font-bold">.yourapp.com</span>
+              <span className=" font-bold">.yourapp.com</span>
             </div>
             {checkingSubdomain && (
-              <p className="text-sm font-mono mt-2 text-gray-600">
+              <p className="text-sm  mt-2 text-gray-600">
                 Checking availability...
               </p>
             )}
             {subdomainAvailable === true && !checkingSubdomain && (
-              <p className="text-sm font-mono mt-2 text-green-600 font-bold">
+              <p className="text-sm  mt-2 text-green-600 font-bold">
                 ✓ Available!
               </p>
             )}
             {subdomainAvailable === false && !checkingSubdomain && (
-              <p className="text-sm font-mono mt-2 text-red-600 font-bold">
+              <p className="text-sm  mt-2 text-red-600 font-bold">
                 ✗ Not available or invalid format
               </p>
             )}
-            <p className="text-xs font-mono mt-2 text-gray-500">
+            <p className="text-xs  mt-2 text-gray-500">
               Only lowercase letters, numbers, and hyphens. Min 3 characters.
             </p>
           </div>
 
           <div>
-            <label className="block text-lg font-bold font-mono mb-2">
+            <label className="block text-lg font-bold  mb-2">
               Description (optional)
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="textarea textarea-bordered w-full border-2 border-black font-mono"
+              className="textarea textarea-bordered w-full border-2 border-black "
               placeholder="A brief description of your site"
               rows={3}
             />

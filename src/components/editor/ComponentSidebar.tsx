@@ -91,7 +91,7 @@ export function ComponentSidebar({ onAddComponent }: ComponentSidebarProps) {
   return (
     <div className="w-72 bg-black border-r-4 border-black flex flex-col">
       <div className="p-4 border-b-2 border-gray-700">
-        <h2 className="text-white font-mono font-bold text-lg">Components</h2>
+        <h2 className="text-white  font-bold text-lg">Components</h2>
       </div>
 
       {/* Category Tabs */}
@@ -100,7 +100,7 @@ export function ComponentSidebar({ onAddComponent }: ComponentSidebarProps) {
           <button
             key={category.name}
             onClick={() => setActiveCategory(category.name)}
-            className={`flex-1 py-2 px-3 font-mono font-bold text-sm border-r-2 border-gray-700 transition-colors ${
+            className={`flex-1 py-2 px-3  font-bold text-sm border-r-2 border-gray-700 transition-colors ${
               activeCategory === category.name
                 ? "bg-yellow-400 text-black"
                 : "bg-gray-900 text-white hover:bg-gray-800"
@@ -122,14 +122,12 @@ export function ComponentSidebar({ onAddComponent }: ComponentSidebarProps) {
               className="w-full p-4 bg-white border-4 border-black text-left hover:bg-yellow-300 transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
             >
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-black text-white flex items-center justify-center font-mono font-bold text-sm border-2 border-black">
+                <div className="w-12 h-12 bg-black text-white flex items-center justify-center  font-bold text-sm border-2 border-black">
                   {component.icon}
                 </div>
                 <div className="flex-1">
-                  <div className="font-mono font-bold text-black">
-                    {component.label}
-                  </div>
-                  <div className="font-mono text-xs text-gray-600">
+                  <div className=" font-bold text-black">{component.label}</div>
+                  <div className=" text-xs text-gray-600">
                     {component.description}
                   </div>
                 </div>

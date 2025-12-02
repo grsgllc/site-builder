@@ -79,7 +79,7 @@ export function EditorCanvas({
               backgroundColor: section.backgroundColor || "transparent",
             }}
           >
-            <div className="absolute top-2 left-2 bg-black text-white px-2 py-1 text-xs font-mono font-bold">
+            <div className="absolute top-2 left-2 bg-black text-white px-2 py-1 text-xs  font-bold">
               {section.name}
             </div>
           </div>
@@ -92,9 +92,7 @@ export function EditorCanvas({
             component={component}
             isSelected={selectedComponent === component.id}
             onSelect={() => onSelectComponent(component.id)}
-            onUpdate={(updates) =>
-              onUpdateComponent(component.id, updates)
-            }
+            onUpdate={(updates) => onUpdateComponent(component.id, updates)}
           />
         ))}
 
@@ -102,10 +100,8 @@ export function EditorCanvas({
         {components.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center p-8 border-4 border-dashed border-gray-400 bg-yellow-100">
-              <p className="font-mono font-bold text-xl mb-2">
-                No components yet
-              </p>
-              <p className="font-mono text-sm text-gray-600">
+              <p className=" font-bold text-xl mb-2">No components yet</p>
+              <p className=" text-sm text-gray-600">
                 Add components from the sidebar to get started
               </p>
             </div>
@@ -164,7 +160,7 @@ function DraggableComponent({
       <ComponentRenderer component={component} isEditor={true} />
 
       {isSelected && (
-        <div className="absolute -top-8 left-0 bg-blue-500 text-white px-2 py-1 text-xs font-mono font-bold flex items-center gap-2">
+        <div className="absolute -top-8 left-0 bg-blue-500 text-white px-2 py-1 text-xs  font-bold flex items-center gap-2">
           <span>{component.type}</span>
           <button
             onClick={(e) => {

@@ -30,7 +30,7 @@ export function PropertiesPanel({
     <div className="w-80 bg-white border-l-4 border-black flex flex-col overflow-auto">
       {/* Header */}
       <div className="p-4 border-b-2 border-black bg-black flex items-center justify-between">
-        <h2 className="text-white font-mono font-bold text-lg capitalize">
+        <h2 className="text-white  font-bold text-lg capitalize">
           {type} Properties
         </h2>
         <button
@@ -49,17 +49,13 @@ export function PropertiesPanel({
             label="X Position"
             type="number"
             value={component.positionX}
-            onChange={(value) =>
-              onUpdate({ positionX: parseFloat(value) })
-            }
+            onChange={(value) => onUpdate({ positionX: parseFloat(value) })}
           />
           <PropertyInput
             label="Y Position"
             type="number"
             value={component.positionY}
-            onChange={(value) =>
-              onUpdate({ positionY: parseFloat(value) })
-            }
+            onChange={(value) => onUpdate({ positionY: parseFloat(value) })}
           />
           <PropertyInput
             label="Width"
@@ -98,9 +94,7 @@ export function PropertiesPanel({
                   min={1}
                   max={6}
                   value={props.level}
-                  onChange={(value) =>
-                    updateProp("level", parseInt(value))
-                  }
+                  onChange={(value) => updateProp("level", parseInt(value))}
                 />
               )}
             </PropertySection>
@@ -110,9 +104,7 @@ export function PropertiesPanel({
                 label="Font Size"
                 type="number"
                 value={props.fontSize}
-                onChange={(value) =>
-                  updateProp("fontSize", parseInt(value))
-                }
+                onChange={(value) => updateProp("fontSize", parseInt(value))}
               />
               <PropertyInput
                 label="Font Weight"
@@ -186,9 +178,7 @@ export function PropertiesPanel({
                 label="Border Width"
                 type="number"
                 value={props.borderWidth}
-                onChange={(value) =>
-                  updateProp("borderWidth", parseInt(value))
-                }
+                onChange={(value) => updateProp("borderWidth", parseInt(value))}
               />
             </PropertySection>
           </>
@@ -230,7 +220,7 @@ export function PropertiesPanel({
               value={props.src}
               onChange={(value) => updateProp("src", value)}
             />
-            <label className="flex items-center gap-2 font-mono text-sm">
+            <label className="flex items-center gap-2  text-sm">
               <input
                 type="checkbox"
                 checked={props.controls}
@@ -239,7 +229,7 @@ export function PropertiesPanel({
               />
               Show Controls
             </label>
-            <label className="flex items-center gap-2 font-mono text-sm">
+            <label className="flex items-center gap-2  text-sm">
               <input
                 type="checkbox"
                 checked={props.autoplay}
@@ -248,7 +238,7 @@ export function PropertiesPanel({
               />
               Autoplay
             </label>
-            <label className="flex items-center gap-2 font-mono text-sm">
+            <label className="flex items-center gap-2  text-sm">
               <input
                 type="checkbox"
                 checked={props.loop}
@@ -265,7 +255,7 @@ export function PropertiesPanel({
       <div className="p-4 border-t-2 border-black">
         <button
           onClick={onDelete}
-          className="w-full btn btn-error border-2 border-black font-mono font-bold"
+          className="w-full btn btn-error border-2 border-black  font-bold"
         >
           Delete Component
         </button>
@@ -283,7 +273,7 @@ function PropertySection({
 }) {
   return (
     <div className="border-2 border-black p-3 bg-gray-50">
-      <h3 className="font-mono font-bold text-sm mb-3 uppercase">{title}</h3>
+      <h3 className=" font-bold text-sm mb-3 uppercase">{title}</h3>
       <div className="space-y-2">{children}</div>
     </div>
   );
@@ -308,19 +298,19 @@ function PropertyInput({
 }) {
   return (
     <div>
-      <label className="block font-mono text-xs font-bold mb-1">{label}</label>
+      <label className="block  text-xs font-bold mb-1">{label}</label>
       {type === "textarea" ? (
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="textarea textarea-bordered w-full text-sm font-mono border-2 border-black"
+          className="textarea textarea-bordered w-full text-sm  border-2 border-black"
           rows={3}
         />
       ) : type === "select" ? (
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="select select-bordered w-full text-sm font-mono border-2 border-black"
+          className="select select-bordered w-full text-sm  border-2 border-black"
         >
           {options?.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -335,7 +325,7 @@ function PropertyInput({
           onChange={(e) => onChange(e.target.value)}
           min={min}
           max={max}
-          className="input input-bordered w-full text-sm font-mono border-2 border-black"
+          className="input input-bordered w-full text-sm  border-2 border-black"
         />
       )}
     </div>

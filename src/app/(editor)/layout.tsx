@@ -31,12 +31,9 @@ export default async function RootLayout({
   if (!session?.user) return redirect("/");
 
   return (
-    <html
-      lang="en"
-      data-theme="saas"
-    >
+    <html lang="en" data-theme="saas">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-base-200 flex flex-col min-h-svh`}
+        className={`${geistSans.variable} ${geistMono.variable} font-mono antialiased bg-base-200 flex flex-col min-h-svh`}
       >
         <main>{children}</main>
         <Toaster position="bottom-center" />

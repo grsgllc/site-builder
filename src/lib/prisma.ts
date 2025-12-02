@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { Site } from "@prisma/client";
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 export const prisma = globalForPrisma.prisma || new PrismaClient();
@@ -96,7 +97,7 @@ export async function getSiteBySubdomain(subdomain: string) {
   return site;
 }
 
-export async function getUserSites(userId: string) {
+export async function getUserSites(userId: string): Promise<Site[]> {
   const sites = await prisma.site.findMany({
     where: { userId },
     include: {

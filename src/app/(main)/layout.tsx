@@ -53,7 +53,7 @@ export default async function RootLayout({
   return (
     <html lang="en" data-theme="saas">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-base-200 flex flex-col min-h-svh`}
+        className={`${geistSans.variable} ${geistMono.variable} font-mono antialiased bg-black flex flex-col min-h-svh`}
       >
         <Header
           user={user}

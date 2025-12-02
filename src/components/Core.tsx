@@ -6,7 +6,7 @@ export const Button: React.FC<
 > = ({ children, className = "", ...props }) => {
   return (
     <button
-      className={`btn btn-primary border-4 border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-bold font-mono md:text-lg xl:text-2xl xl:p-6 mt-2 ${className}`}
+      className={`btn btn-primary border-4 border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-bold  md:text-lg xl:text-2xl xl:p-6 mt-2 ${className}`}
       {...props}
     >
       {children}
