@@ -35,7 +35,7 @@ function DashboardToolbar() {
         <FaSort className="size-3/4" />
       </button>
       <Link
-        href="/editor/new"
+        href="/templates"
         className="btn btn-primary btn-ghost btn-xl text-4xl"
       >
         +
@@ -59,7 +59,7 @@ function SiteCard({ site, isOwner }: { site: Site; isOwner: boolean }) {
     : null;
 
   return (
-    <div className="card rounded-none border-4 border-white overflow-hidden md:max-w-xs">
+    <div className="card rounded-none border-1 border-white overflow-hidden md:max-w-xs">
       <figure>
         <Image
           width={1000}

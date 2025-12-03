@@ -129,6 +129,8 @@ model Site {
   pages         Page[]
   collaborators SiteCollaborator[]
   assets        Asset[]
+  isTemplate    Boolean             @default(false)
+  sourceTemplateId String?          @db.ObjectId
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
 }

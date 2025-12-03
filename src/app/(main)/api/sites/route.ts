@@ -4,7 +4,7 @@ import {
   createSite,
   createPage,
   checkSubdomainAvailable,
-  getAllLayouts,
+  copyTemplateToSite,
 } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { subdomain, name, description, layoutId } = body;
+    const { subdomain, name, description, templateId } = body;
 
     if (!subdomain || !name) {
       return NextResponse.json(
@@ -34,32 +34,36 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Get default layout if none specified
-    let finalLayoutId = layoutId;
-    if (!finalLayoutId) {
-      const layouts = await getAllLayouts();
-      const defaultLayout = layouts.find((l) => l.isDefault);
-      finalLayoutId = defaultLayout?.id;
+    let site;
+
+    if (templateId) {
+      // Copy from template (includes all pages and components)
+      site = await copyTemplateToSite(
+        templateId,
+        session.user.id,
+        subdomain,
+        name,
+        description
+      );
+    } else {
+      // Create blank site
+      site = await createSite({
+        subdomain,
+        name,
+        description,
+        userId: session.user.id,
+      });
+
+      // Create a default home page for blank sites
+      await createPage({
+        siteId: site.id,
+        title: "Home",
+        slug: "home",
+        isHome: true,
+        seoTitle: name,
+        seoDescription: description || `Welcome to ${name}`,
+      });
     }
-
-    // Create the site
-    const site = await createSite({
-      subdomain,
-      name,
-      description,
-      userId: session.user.id,
-      layoutId: finalLayoutId,
-    });
-
-    // Create a default home page for the site
-    await createPage({
-      siteId: site.id,
-      title: "Home",
-      slug: "home",
-      isHome: true,
-      seoTitle: name,
-      seoDescription: description || `Welcome to ${name}`,
-    });
 
     return NextResponse.json(
       {

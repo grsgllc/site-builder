@@ -4,31 +4,11 @@ import { useState, useRef } from "react";
 import { DndContext, DragEndEvent, useDraggable } from "@dnd-kit/core";
 import { ComponentRenderer } from "./ComponentRenderer";
 
-interface EditorCanvasProps {
-  layout: any;
-  components: any[];
-  selectedComponent: string | null;
-  onSelectComponent: (id: string | null) => void;
-  onUpdateComponent: (id: string, updates: any) => void;
-  onDeleteComponent: (id: string) => void;
-  isDragging: boolean;
-  setIsDragging: (isDragging: boolean) => void;
-}
-
-export function EditorCanvas({
-  layout,
-  components,
-  selectedComponent,
-  onSelectComponent,
-  onUpdateComponent,
-  onDeleteComponent,
-  isDragging,
-  setIsDragging,
-}: EditorCanvasProps) {
+export function EditorCanvas() {
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, delta } = event;
+    /* const { active, delta } = event;
     const component = components.find((c) => c.id === active.id);
 
     if (component) {
@@ -38,7 +18,7 @@ export function EditorCanvas({
       });
     }
 
-    setIsDragging(false);
+    setIsDragging(false); */
   };
 
   return (

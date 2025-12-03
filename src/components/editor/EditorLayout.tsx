@@ -5,25 +5,23 @@ import { EditorToolbar } from "./EditorToolbar";
 import { ComponentSidebar } from "./ComponentSidebar";
 import { EditorCanvas } from "./EditorCanvas";
 import { PropertiesPanel } from "./PropertiesPanel";
+import { FaChevronLeft } from "react-icons/fa";
+import { TbBackground } from "react-icons/tb";
+import { FiPlus } from "react-icons/fi";
 
-interface EditorLayoutProps {
-  site: any;
-  user: any;
-}
-
-export function EditorLayout({ site, user }: EditorLayoutProps) {
+export function EditorLayout() {
   const [selectedComponent, setSelectedComponent] = useState<string | null>(
     null
   );
   const [components, setComponents] = useState<any[]>([]);
-  const [page, setPage] = useState(site.pages[0]);
+  //const [page, setPage] = useState(site.pages[0]);
   const [isDragging, setIsDragging] = useState(false);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (page) {
       setComponents(page.components || []);
     }
-  }, [page]);
+  }, [page]); */
 
   const handleAddComponent = (type: string) => {
     const newComponent = {
@@ -61,45 +59,17 @@ export function EditorLayout({ site, user }: EditorLayoutProps) {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
-      {/* Toolbar */}
-      <EditorToolbar
-        siteName={site.name}
-        onSave={handleSave}
-        published={site.published}
-        subdomain={site.subdomain}
-      />
+    <div className="flex flex-col">
+      <EditorToolbar />
+      <EditorCanvas />
+    </div>
+  );
+}
 
-      <div className="flex-1 flex overflow-hidden">
-        {/* Component Library Sidebar */}
-        <ComponentSidebar onAddComponent={handleAddComponent} />
-
-        {/* Canvas */}
-        <div className="flex-1 overflow-auto bg-gray-200">
-          <EditorCanvas
-            layout={site.layout}
-            components={components}
-            selectedComponent={selectedComponent}
-            onSelectComponent={setSelectedComponent}
-            onUpdateComponent={handleUpdateComponent}
-            onDeleteComponent={handleDeleteComponent}
-            isDragging={isDragging}
-            setIsDragging={setIsDragging}
-          />
-        </div>
-
-        {/* Properties Panel */}
-        {selectedComponent && (
-          <PropertiesPanel
-            component={components.find((c) => c.id === selectedComponent)}
-            onUpdate={(updates) =>
-              handleUpdateComponent(selectedComponent, updates)
-            }
-            onDelete={() => handleDeleteComponent(selectedComponent)}
-            onClose={() => setSelectedComponent(null)}
-          />
-        )}
-      </div>
+function ToolbarItem({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="border-r-1 border-white flex items-center px-3">
+      {children}
     </div>
   );
 }

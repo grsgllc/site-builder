@@ -42,7 +42,6 @@ export async function createSite(data: {
   name: string;
   userId: string;
   description?: string;
-  layoutId?: string;
 }) {
   const site = await prisma.site.create({
     data: {
@@ -50,10 +49,9 @@ export async function createSite(data: {
       name: data.name,
       userId: data.userId,
       description: data.description,
-      layoutId: data.layoutId,
+      isTemplate: false,
     },
     include: {
-      layout: true,
       user: true,
     },
   });
@@ -64,7 +62,6 @@ export async function getSite(id: string) {
   const site = await prisma.site.findUnique({
     where: { id },
     include: {
-      layout: true,
       user: true,
       pages: {
         include: {
@@ -85,7 +82,6 @@ export async function getSiteBySubdomain(subdomain: string) {
   const site = await prisma.site.findUnique({
     where: { subdomain },
     include: {
-      layout: true,
       user: true,
       pages: {
         include: {
@@ -99,9 +95,11 @@ export async function getSiteBySubdomain(subdomain: string) {
 
 export async function getUserSites(userId: string): Promise<Site[]> {
   const sites = await prisma.site.findMany({
-    where: { userId },
+    where: {
+      userId,
+      isTemplate: false,
+    },
     include: {
-      layout: true,
       pages: true,
       collaborators: true,
     },
@@ -112,11 +110,15 @@ export async function getUserSites(userId: string): Promise<Site[]> {
 
 export async function getUserCollaboratingSites(userId: string) {
   const collaborations = await prisma.siteCollaborator.findMany({
-    where: { userId },
+    where: {
+      userId,
+      site: {
+        isTemplate: false,
+      },
+    },
     include: {
       site: {
         include: {
-          layout: true,
           pages: true,
           user: true,
         },
@@ -134,7 +136,6 @@ export async function updateSite(
     description?: string;
     subdomain?: string;
     published?: boolean;
-    layoutId?: string;
     themeSettings?: any;
     seoTitle?: string;
     seoDescription?: string;
@@ -364,56 +365,97 @@ export async function bulkUpdateComponents(
   await Promise.all(promises);
 }
 
-// ===== Layout Functions =====
+// ===== Template Functions =====
 
-export async function createLayout(data: {
-  name: string;
-  description?: string;
-  thumbnail?: string;
-  structure: any;
-  isDefault?: boolean;
-}) {
-  const layout = await prisma.layout.create({
-    data,
+export async function getTemplates() {
+  const templates = await prisma.site.findMany({
+    where: { isTemplate: true },
+    include: {
+      pages: {
+        include: {
+          components: true,
+        },
+      },
+      user: true,
+    },
+    orderBy: { createdAt: "asc" },
   });
-  return layout;
+  return templates;
 }
 
-export async function getLayout(id: string) {
-  const layout = await prisma.layout.findUnique({
-    where: { id },
+export async function getTemplate(id: string) {
+  const template = await prisma.site.findUnique({
+    where: { id, isTemplate: true },
+    include: {
+      pages: {
+        include: {
+          components: true,
+        },
+      },
+    },
   });
-  return layout;
+  return template;
 }
 
-export async function getAllLayouts() {
-  const layouts = await prisma.layout.findMany({
-    orderBy: { isDefault: "desc" },
-  });
-  return layouts;
-}
-
-export async function updateLayout(
-  id: string,
-  data: {
-    name?: string;
-    description?: string;
-    thumbnail?: string;
-    structure?: any;
-    isDefault?: boolean;
-  }
+export async function copyTemplateToSite(
+  templateId: string,
+  userId: string,
+  subdomain: string,
+  name: string,
+  description?: string
 ) {
-  const layout = await prisma.layout.update({
-    where: { id },
-    data,
-  });
-  return layout;
-}
+  const template = await getTemplate(templateId);
+  if (!template) throw new Error("Template not found");
 
-export async function deleteLayout(id: string) {
-  await prisma.layout.delete({
-    where: { id },
+  // Create new site from template
+  const newSite = await prisma.site.create({
+    data: {
+      name,
+      subdomain,
+      description,
+      userId,
+      isTemplate: false,
+      sourceTemplateId: templateId,
+      published: false,
+      themeSettings: template.themeSettings,
+      favicon: template.favicon,
+      seoTitle: template.seoTitle,
+      seoDescription: template.seoDescription,
+    },
   });
+
+  // Copy all pages
+  for (const templatePage of template.pages) {
+    const newPage = await prisma.page.create({
+      data: {
+        siteId: newSite.id,
+        title: templatePage.title,
+        slug: templatePage.slug,
+        isHome: templatePage.isHome,
+        seoTitle: templatePage.seoTitle,
+        seoDescription: templatePage.seoDescription,
+      },
+    });
+
+    // Copy all components for this page
+    for (const component of templatePage.components) {
+      await prisma.component.create({
+        data: {
+          pageId: newPage.id,
+          type: component.type,
+          props: component.props,
+          positionX: component.positionX,
+          positionY: component.positionY,
+          width: component.width,
+          height: component.height,
+          zIndex: component.zIndex,
+          layoutSection: component.layoutSection,
+        },
+      });
+    }
+  }
+
+  return newSite;
 }
 
 // ===== Asset Functions =====

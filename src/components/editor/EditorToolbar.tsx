@@ -2,78 +2,55 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { FaChevronLeft, FaFolder } from "react-icons/fa";
+import { TbBackground } from "react-icons/tb";
+import { FiPlus } from "react-icons/fi";
+import { IoOptionsOutline } from "react-icons/io5";
+import { MdFormatColorText } from "react-icons/md";
+import { IoIosPhonePortrait, IoIosDocument } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
-interface EditorToolbarProps {
-  siteName: string;
-  onSave: () => void;
-  published: boolean;
-  subdomain: string;
+export function EditorToolbar() {
+  const iconSize = 30;
+  const router = useRouter();
+  return (
+    <div className="flex flex-row border-b-1 border-white w-full">
+      <div className="shrink border-r-1 border-white p-2">
+        <FaChevronLeft onClick={() => router.back()} size={iconSize} />
+      </div>
+      <div className="flex grow overflow-x-auto">
+        <div className="grid auto-cols-min grid-flow-col">
+          <ToolbarItem>
+            <IoIosPhonePortrait size={iconSize} />
+          </ToolbarItem>
+          <ToolbarItem>
+            <FiPlus size={iconSize} />
+          </ToolbarItem>
+          <ToolbarItem>
+            <TbBackground size={iconSize} />
+          </ToolbarItem>
+          <ToolbarItem>
+            <IoOptionsOutline size={iconSize} />
+          </ToolbarItem>
+          <ToolbarItem>
+            <MdFormatColorText size={iconSize} />
+          </ToolbarItem>
+          <ToolbarItem>
+            <IoIosDocument size={iconSize} />
+          </ToolbarItem>
+          <ToolbarItem>
+            <FaFolder size={iconSize} />
+          </ToolbarItem>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export function EditorToolbar({
-  siteName,
-  onSave,
-  published,
-  subdomain,
-}: EditorToolbarProps) {
-  const [saving, setSaving] = useState(false);
-
-  const handleSave = async () => {
-    setSaving(true);
-    await onSave();
-    setSaving(false);
-  };
-
+function ToolbarItem({ children }: { children: React.ReactNode }) {
   return (
-    <div className="h-16 bg-black border-b-4 border-black flex items-center justify-between px-6 shadow-lg">
-      <div className="flex items-center gap-4">
-        <Link
-          href="/dashboard"
-          className="text-white  font-bold hover:text-yellow-300 transition-colors"
-        >
-          ← Dashboard
-        </Link>
-        <div className="h-8 w-px bg-gray-600" />
-        <h1 className="text-white  font-bold text-lg">{siteName}</h1>
-        <span
-          className={`px-2 py-1 text-xs font-bold  border-2 ${
-            published
-              ? "bg-green-400 border-green-600"
-              : "bg-gray-400 border-gray-600"
-          }`}
-        >
-          {published ? "LIVE" : "DRAFT"}
-        </span>
-      </div>
-
-      <div className="flex items-center gap-3">
-        {published && (
-          <a
-            href={`https://${subdomain}.yourapp.com`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-4 py-2 bg-white text-black  font-bold border-2 border-white hover:bg-gray-200 transition-colors"
-          >
-            View Live
-          </a>
-        )}
-
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="px-4 py-2 bg-yellow-400 text-black  font-bold border-2 border-yellow-600 hover:bg-yellow-300 transition-colors disabled:opacity-50"
-        >
-          {saving ? "Saving..." : "Save"}
-        </button>
-
-        <button className="px-4 py-2 bg-blue-500 text-white  font-bold border-2 border-blue-700 hover:bg-blue-400 transition-colors">
-          Preview
-        </button>
-
-        <button className="px-4 py-2 bg-red-500 text-white  font-bold border-2 border-red-700 hover:bg-red-400 transition-colors">
-          Publish
-        </button>
-      </div>
+    <div className="border-r-1 border-white flex items-center px-3">
+      {children}
     </div>
   );
 }

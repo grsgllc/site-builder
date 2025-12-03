@@ -7,7 +7,7 @@ import { auth, signOut } from "@/lib/auth";
 import { createPortalSession } from "@/lib/stripe";
 import { UserDetails } from "@/types";
 import { redirect } from "next/navigation";
-import "./editor.css";
+import "../../global.css";
 
 export const metadata = getSEOTags();
 
