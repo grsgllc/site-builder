@@ -7,7 +7,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { EditorLayout } from "@/components/editor/EditorLayout";
 
-export default function NewSitePage({ layouts }: { layouts: Layout[] }) {
+export default function NewSitePage() {
   const router = useRouter();
   const {
     state,

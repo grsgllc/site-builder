@@ -65,7 +65,7 @@ function TemplateCard({
 }) {
   return (
     <div
-      className="card rounded-none border-1 border-white overflow-hidden md:max-w-xs cursor-pointer"
+      className="card rounded-none border-1 border-white overflow-hidden md:max-w-xs cursor-pointer hover:bg-white/10 transition-colors"
       onClick={() => onSelect(template?.id ?? null)}
     >
       <figure>
