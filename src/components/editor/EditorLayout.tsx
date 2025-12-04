@@ -9,13 +9,20 @@ import { FaChevronLeft } from "react-icons/fa";
 import { TbBackground } from "react-icons/tb";
 import { FiPlus } from "react-icons/fi";
 
-export function EditorLayout() {
+interface EditorLayoutProps {
+  site?: any;
+  user?: any;
+}
+
+export function EditorLayout({ site, user }: EditorLayoutProps = { site: null, user: null }) {
   const [selectedComponent, setSelectedComponent] = useState<string | null>(
     null
   );
   const [components, setComponents] = useState<any[]>([]);
   //const [page, setPage] = useState(site.pages[0]);
   const [isDragging, setIsDragging] = useState(false);
+  const [viewportMode, setViewportMode] = useState<'mobile' | 'desktop'>('mobile');
+  const [zoom, setZoom] = useState(1);
 
   /* useEffect(() => {
     if (page) {
@@ -53,6 +60,17 @@ export function EditorLayout() {
     }
   };
 
+  const handleDragEnd = (componentId: string, delta: { x: number; y: number }) => {
+    const component = components.find((c) => c.id === componentId);
+    if (component) {
+      handleUpdateComponent(componentId, {
+        positionX: component.positionX + delta.x / zoom,
+        positionY: component.positionY + delta.y / zoom,
+      });
+    }
+    setIsDragging(false);
+  };
+
   const handleSave = async () => {
     // TODO: Implement save functionality
     console.log("Saving...", components);
@@ -61,15 +79,17 @@ export function EditorLayout() {
   return (
     <div className="flex flex-col">
       <EditorToolbar />
-      <EditorCanvas />
-    </div>
-  );
-}
-
-function ToolbarItem({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="border-r-1 border-white flex items-center px-3">
-      {children}
+      <EditorCanvas
+        components={components}
+        selectedComponent={selectedComponent}
+        viewportMode={viewportMode}
+        zoom={zoom}
+        onSelectComponent={setSelectedComponent}
+        onUpdateComponent={handleUpdateComponent}
+        onDragStart={() => setIsDragging(true)}
+        onDragEnd={handleDragEnd}
+        onZoomChange={setZoom}
+      />
     </div>
   );
 }

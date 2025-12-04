@@ -1,94 +1,143 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { DndContext, DragEndEvent, useDraggable } from "@dnd-kit/core";
 import { ComponentRenderer } from "./ComponentRenderer";
 
-export function EditorCanvas() {
+interface EditorCanvasProps {
+  components: any[];
+  selectedComponent: string | null;
+  viewportMode: 'mobile' | 'desktop';
+  zoom: number;
+  onSelectComponent: (id: string | null) => void;
+  onUpdateComponent: (id: string, updates: any) => void;
+  onDragStart: () => void;
+  onDragEnd: (componentId: string, delta: { x: number; y: number }) => void;
+  onZoomChange: (zoom: number) => void;
+}
+
+export function EditorCanvas({
+  components,
+  selectedComponent,
+  viewportMode,
+  zoom,
+  onSelectComponent,
+  onUpdateComponent,
+  onDragStart,
+  onDragEnd,
+  onZoomChange,
+}: EditorCanvasProps) {
+  const CANVAS_DIMENSIONS = {
+    mobile: { width: 375, height: 667 },
+    desktop: { width: 1200, height: 675 },
+  };
+  const ZOOM_MIN = 0.25;
+  const ZOOM_MAX = 2.0;
+  const GRID_SIZE = 20;
+
+  const viewportRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
+  const [viewportPadding, setViewportPadding] = useState(0);
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    /* const { active, delta } = event;
-    const component = components.find((c) => c.id === active.id);
+  const canvasDimensions = CANVAS_DIMENSIONS[viewportMode];
 
-    if (component) {
-      onUpdateComponent(component.id, {
-        positionX: component.positionX + delta.x,
-        positionY: component.positionY + delta.y,
-      });
+  useEffect(() => {
+    const updatePadding = () => {
+      if (viewportRef.current) {
+        const viewportWidth = viewportRef.current.clientWidth;
+        const viewportHeight = viewportRef.current.clientHeight;
+        const padding = Math.min(viewportWidth, viewportHeight) * 0.5;
+        setViewportPadding(padding);
+      }
+    };
+
+    updatePadding();
+    window.addEventListener('resize', updatePadding);
+    return () => window.removeEventListener('resize', updatePadding);
+  }, []);
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      const zoomDelta = -e.deltaY * 0.001;
+      let newZoom = zoom + zoomDelta;
+      newZoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, newZoom));
+      onZoomChange(newZoom);
     }
+  };
 
-    setIsDragging(false); */
+  const handleDragEndInternal = (event: DragEndEvent) => {
+    const { active, delta } = event;
+    onDragEnd(active.id as string, delta);
   };
 
   return (
-    <DndContext
-      onDragEnd={handleDragEnd}
-      onDragStart={() => setIsDragging(true)}
+    <div
+      ref={viewportRef}
+      className="relative overflow-auto"
+      style={{
+        width: '100%',
+        height: 'calc(100vh - 64px)',
+        backgroundColor: '#000',
+      }}
+      onWheel={handleWheel}
     >
       <div
-        ref={canvasRef}
-        className="relative min-h-screen bg-white mx-auto"
         style={{
-          width: "1200px",
-          boxShadow: "0 0 40px rgba(0,0,0,0.1)",
-        }}
-        onClick={(e) => {
-          if (e.target === canvasRef.current) {
-            onSelectComponent(null);
-          }
+          minWidth: `calc(${canvasDimensions.width}px * ${zoom} + ${viewportPadding * 2}px)`,
+          minHeight: `calc(${canvasDimensions.height}px * ${zoom} + ${viewportPadding * 2}px)`,
+          padding: `${viewportPadding}px`,
+          backgroundColor: '#000',
         }}
       >
-        {/* Grid Background */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-10"
-          style={{
-            backgroundImage:
-              "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)",
-            backgroundSize: "20px 20px",
-          }}
-        />
-
-        {/* Layout Sections (if layout is defined) */}
-        {layout?.structure?.sections?.map((section: any, index: number) => (
+        <DndContext
+          onDragEnd={handleDragEndInternal}
+          onDragStart={onDragStart}
+        >
           <div
-            key={index}
-            className="border-2 border-dashed border-gray-400 relative"
+            ref={canvasRef}
+            className="relative"
             style={{
-              minHeight: section.minHeight || 200,
-              backgroundColor: section.backgroundColor || "transparent",
+              width: `${canvasDimensions.width}px`,
+              height: `${canvasDimensions.height}px`,
+              backgroundColor: '#000',
+              border: '4px solid #fff',
+              transform: `scale(${zoom})`,
+              transformOrigin: 'top left',
+              backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+              backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
+            }}
+            onClick={(e) => {
+              if (e.target === canvasRef.current) {
+                onSelectComponent(null);
+              }
             }}
           >
-            <div className="absolute top-2 left-2 bg-black text-white px-2 py-1 text-xs  font-bold">
-              {section.name}
-            </div>
-          </div>
-        ))}
+            {/* Components */}
+            {components.map((component) => (
+              <DraggableComponent
+                key={component.id}
+                component={component}
+                isSelected={selectedComponent === component.id}
+                onSelect={() => onSelectComponent(component.id)}
+              />
+            ))}
 
-        {/* Components */}
-        {components.map((component) => (
-          <DraggableComponent
-            key={component.id}
-            component={component}
-            isSelected={selectedComponent === component.id}
-            onSelect={() => onSelectComponent(component.id)}
-            onUpdate={(updates) => onUpdateComponent(component.id, updates)}
-          />
-        ))}
-
-        {/* Empty State */}
-        {components.length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center p-8 border-4 border-dashed border-gray-400 bg-yellow-100">
-              <p className=" font-bold text-xl mb-2">No components yet</p>
-              <p className=" text-sm text-gray-600">
-                Add components from the sidebar to get started
-              </p>
-            </div>
+            {/* Empty State */}
+            {components.length === 0 && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center p-8 border-4 border-dashed border-white bg-gray-800">
+                  <p className="font-bold text-xl mb-2 text-white">No components yet</p>
+                  <p className="text-sm text-gray-400">
+                    Add components from the sidebar to get started
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </DndContext>
       </div>
-    </DndContext>
+    </div>
   );
 }
 
@@ -96,12 +145,10 @@ function DraggableComponent({
   component,
   isSelected,
   onSelect,
-  onUpdate,
 }: {
   component: any;
   isSelected: boolean;
   onSelect: () => void;
-  onUpdate: (updates: any) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({

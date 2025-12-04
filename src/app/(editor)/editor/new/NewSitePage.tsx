@@ -2,8 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-
-import { Layout } from "@prisma/client";
 import { useEditor } from "@/context/EditorContext";
 import { useState } from "react";
 import Image from "next/image";

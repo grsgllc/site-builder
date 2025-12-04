@@ -2,21 +2,22 @@
 
 import { useEditor } from "@/context/EditorContext";
 import { useState } from "react";
-import { Layout } from "@prisma/client";
+import { Template } from "@/types";
 import { FaChevronLeft } from "react-icons/fa";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function TemplateSelectionPage({
-  layouts,
+  templates,
 }: {
-  layouts: Layout[];
+  templates: Template[];
 }) {
   const router = useRouter();
-  const [availableLayouts, setAvailableLayouts] = useState<Layout[]>(layouts);
+  const [availableTemplates, setAvailableTemplates] =
+    useState<Template[]>(templates);
 
-  const onSelect = (layoutId: string | null) => {
-    const href = `/editor/new${layoutId ? `?templateId=${layoutId}` : ""}`;
+  const onSelect = (templateId: string | null) => {
+    const href = `/editor/new${templateId ? `?templateId=${templateId}` : ""}`;
     router.push(href);
   };
 
@@ -47,8 +48,8 @@ export default function TemplateSelectionPage({
         {/* Blank Page */}
         <TemplateCard onSelect={onSelect} />
 
-        {availableLayouts.map((layout) => (
-          <TemplateCard layout={layout} onSelect={onSelect} />
+        {availableTemplates.map((template) => (
+          <TemplateCard template={template} onSelect={onSelect} />
         ))}
       </div>
     </div>
@@ -56,31 +57,31 @@ export default function TemplateSelectionPage({
 }
 
 function TemplateCard({
-  layout,
+  template,
   onSelect,
 }: {
-  layout?: Layout | null;
-  onSelect: (layoutId: string | null) => void;
+  template?: Template | null;
+  onSelect: (templateId: string | null) => void;
 }) {
   return (
     <div
-      className="card rounded-none border-1 border-white overflow-hidden md:max-w-xs"
-      onClick={() => onSelect(layout?.id ?? null)}
+      className="card rounded-none border-1 border-white overflow-hidden md:max-w-xs cursor-pointer"
+      onClick={() => onSelect(template?.id ?? null)}
     >
       <figure>
         <Image
           width={1000}
           height={1000}
-          src={layout?.thumbnail ?? "/blank-layout-image.jpg"}
-          alt={layout?.name ?? "Blank Page"}
-          priority={layout ? false : true}
+          src={template?.previewImg ?? "/blank-layout-image.jpg"}
+          alt={template?.name ?? "Blank Page"}
+          priority={template ? false : true}
         />
       </figure>
       <div className="card-body">
-        <h2 className="card-title ">{layout?.name ?? "Blank Page"}</h2>
-        {layout?.description && (
+        <h2 className="card-title ">{template?.name ?? "Blank Page"}</h2>
+        {template?.description && (
           <p className="text-sm  mt-3 line-clamp-2 text-gray-700">
-            {layout.description}
+            {template.description}
           </p>
         )}
       </div>

@@ -1,5 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { Site } from "@prisma/client";
+import { Template } from "@/types";
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 export const prisma = globalForPrisma.prisma || new PrismaClient();
@@ -367,23 +368,22 @@ export async function bulkUpdateComponents(
 
 // ===== Template Functions =====
 
-export async function getTemplates() {
+export async function getTemplates(): Promise<Template[]> {
   const templates = await prisma.site.findMany({
-    where: { isTemplate: true },
-    include: {
-      pages: {
-        include: {
-          components: true,
-        },
-      },
-      user: true,
+    select: {
+      id: true,
+      subdomain: true,
+      name: true,
+      description: true,
+      previewImg: true,
     },
+    where: { isTemplate: true },
     orderBy: { createdAt: "asc" },
   });
   return templates;
 }
 
-export async function getTemplate(id: string) {
+export async function getTemplate(id: string): Promise<Site | null> {
   const template = await prisma.site.findUnique({
     where: { id, isTemplate: true },
     include: {
@@ -404,7 +404,16 @@ export async function copyTemplateToSite(
   name: string,
   description?: string
 ) {
-  const template = await getTemplate(templateId);
+  const template = await prisma.site.findUnique({
+    where: { id: templateId, isTemplate: true },
+    include: {
+      pages: {
+        include: {
+          components: true,
+        },
+      },
+    },
+  });
   if (!template) throw new Error("Template not found");
 
   // Create new site from template
@@ -417,7 +426,7 @@ export async function copyTemplateToSite(
       isTemplate: false,
       sourceTemplateId: templateId,
       published: false,
-      themeSettings: template.themeSettings,
+      themeSettings: template.themeSettings ?? undefined,
       favicon: template.favicon,
       seoTitle: template.seoTitle,
       seoDescription: template.seoDescription,
@@ -443,7 +452,7 @@ export async function copyTemplateToSite(
         data: {
           pageId: newPage.id,
           type: component.type,
-          props: component.props,
+          props: component.props ?? Prisma.JsonNull,
           positionX: component.positionX,
           positionY: component.positionY,
           width: component.width,

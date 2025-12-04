@@ -5,16 +5,18 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
  
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
  
 model User {
-  id                 String              @id @default(auto()) @map("_id") @db.ObjectId
+  id                 String              @id @default(cuid())
   name               String?
   email              String?             @unique
   emailVerified      DateTime?
@@ -37,17 +39,17 @@ model User {
 }
  
 model Account {
-  id                String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String    @db.ObjectId
+  id                String    @id @default(cuid())
+  userId            String    
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?   @db.String
-  access_token      String?   @db.String
+  refresh_token     String?   
+  access_token      String?   
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?   @db.String
+  id_token          String?   
   session_state     String?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
@@ -57,9 +59,9 @@ model Account {
 }
  
 model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String   @db.ObjectId
+  userId       String   
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt    DateTime @default(now())
@@ -67,7 +69,7 @@ model Session {
 }
  
 model VerificationToken {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(cuid())
   identifier String
   token      String
   expires    DateTime
@@ -76,8 +78,8 @@ model VerificationToken {
 }
  
 model Authenticator {
-  credentialID         String   @id @map("_id")
-  userId               String   @db.ObjectId
+  credentialID         String   @id 
+  userId               String   
   providerAccountId    String
   credentialPublicKey  String
   counter              Int
@@ -90,20 +92,20 @@ model Authenticator {
 }
 
 model UserSettings {
-  id                String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String    @db.ObjectId
+  id                String    @id @default(cuid())
+  userId            String    
   createdAt         DateTime? @default(now())
   updatedAt         DateTime? @updatedAt
   user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model BetaWhitelist {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   email     String   @unique
 }
 
 model BetaRequest{
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid())
   email     String   @unique
   approved Boolean @default(false)
   rejected Boolean @default(false)
@@ -112,37 +114,36 @@ model BetaRequest{
 // Site Builder Models
 
 model Site {
-  id            String              @id @default(auto()) @map("_id") @db.ObjectId
+  id            String              @id @default(cuid())
   subdomain     String              @unique
   name          String
   description   String?
   favicon       String?
-  userId        String              @db.ObjectId
+  userId        String              
   user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  layoutId      String?             @db.ObjectId
-  layout        Layout?             @relation(fields: [layoutId], references: [id])
   published     Boolean             @default(false)
   themeSettings Json?               // Stores custom theme/style settings
   seoTitle      String?
   seoDescription String?
   ogImage       String?
+  previewImg    String?
   pages         Page[]
   collaborators SiteCollaborator[]
   assets        Asset[]
   isTemplate    Boolean             @default(false)
-  sourceTemplateId String?          @db.ObjectId
+  sourceTemplateId String?          
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
 }
 
 model SiteCollaborator {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  siteId    String   @db.ObjectId
+  id        String   @id @default(cuid())
+  siteId    String   
   site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
-  userId    String   @db.ObjectId
+  userId    String   
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   role      String   // "owner", "editor", "viewer"
-  invitedBy String?  @db.ObjectId
+  invitedBy String?  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -150,8 +151,8 @@ model SiteCollaborator {
 }
 
 model Page {
-  id             String      @id @default(auto()) @map("_id") @db.ObjectId
-  siteId         String      @db.ObjectId
+  id             String      @id @default(cuid())
+  siteId         String      
   site           Site        @relation(fields: [siteId], references: [id], onDelete: Cascade)
   title          String
   slug           String
@@ -167,8 +168,8 @@ model Page {
 }
 
 model Component {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  pageId        String   @db.ObjectId
+  id            String   @id @default(cuid())
+  pageId        String   
   page          Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
   type          String   // "text", "image", "video", "button", "gallery", etc.
   props         Json     // All component properties (content, styles, animations, etc.)
@@ -182,23 +183,11 @@ model Component {
   updatedAt     DateTime @updatedAt
 }
 
-model Layout {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String   @unique
-  description String?
-  thumbnail   String?  // URL to preview image
-  structure   Json     // Defines sections, their positions, and constraints
-  isDefault   Boolean  @default(false)
-  sites       Site[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
 model Asset {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
+  id        String   @id @default(cuid())
+  userId    String   
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  siteId    String?  @db.ObjectId
+  siteId    String?  
   site      Site?    @relation(fields: [siteId], references: [id], onDelete: Cascade)
   url       String   // Vercel Blob URL
   filename  String

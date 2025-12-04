@@ -35,7 +35,7 @@ function DashboardToolbar() {
         <FaSort className="size-3/4" />
       </button>
       <Link
-        href="/templates"
+        href="/templates/select"
         className="btn btn-primary btn-ghost btn-xl text-4xl"
       >
         +
