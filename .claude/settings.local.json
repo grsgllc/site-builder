@@ -5,7 +5,8 @@
       "Bash(npx prisma generate:*)",
       "Bash(dir /s /b srcapp 2)",
       "Bash(nul)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

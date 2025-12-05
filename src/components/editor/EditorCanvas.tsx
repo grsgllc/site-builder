@@ -7,7 +7,7 @@ import { ComponentRenderer } from "./ComponentRenderer";
 interface EditorCanvasProps {
   components: any[];
   selectedComponent: string | null;
-  viewportMode: 'mobile' | 'desktop';
+  viewportMode: "mobile" | "desktop";
   zoom: number;
   onSelectComponent: (id: string | null) => void;
   onUpdateComponent: (id: string, updates: any) => void;
@@ -52,19 +52,35 @@ export function EditorCanvas({
     };
 
     updatePadding();
-    window.addEventListener('resize', updatePadding);
-    return () => window.removeEventListener('resize', updatePadding);
+    window.addEventListener("resize", updatePadding);
+    return () => window.removeEventListener("resize", updatePadding);
   }, []);
 
-  const handleWheel = (e: React.WheelEvent) => {
-    if (e.ctrlKey || e.metaKey) {
-      e.preventDefault();
-      const zoomDelta = -e.deltaY * 0.001;
-      let newZoom = zoom + zoomDelta;
-      newZoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, newZoom));
-      onZoomChange(newZoom);
-    }
-  };
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const handleWheelNative = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const zoomDelta = -e.deltaY * 0.001;
+        let newZoom = zoom + zoomDelta;
+        newZoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, newZoom));
+        onZoomChange(newZoom);
+      }
+    };
+
+    viewport.addEventListener("wheel", handleWheelNative, {
+      passive: false,
+      capture: true,
+    });
+
+    return () => {
+      viewport.removeEventListener("wheel", handleWheelNative, {
+        capture: true,
+      } as EventListenerOptions);
+    };
+  }, [zoom, onZoomChange]);
 
   const handleDragEndInternal = (event: DragEndEvent) => {
     const { active, delta } = event;
@@ -74,37 +90,35 @@ export function EditorCanvas({
   return (
     <div
       ref={viewportRef}
-      className="relative overflow-auto"
+      className="relative overflow-auto flex-1"
       style={{
-        width: '100%',
-        height: 'calc(100vh - 64px)',
-        backgroundColor: '#000',
+        width: "100%",
+        backgroundColor: "#000",
       }}
-      onWheel={handleWheel}
     >
       <div
         style={{
-          minWidth: `calc(${canvasDimensions.width}px * ${zoom} + ${viewportPadding * 2}px)`,
-          minHeight: `calc(${canvasDimensions.height}px * ${zoom} + ${viewportPadding * 2}px)`,
+          minWidth: `calc(${canvasDimensions.width}px * ${zoom} + ${
+            viewportPadding * 2
+          }px)`,
+          minHeight: `calc(${canvasDimensions.height}px * ${zoom} + ${
+            viewportPadding * 2
+          }px)`,
           padding: `${viewportPadding}px`,
-          backgroundColor: '#000',
+          backgroundColor: "#000",
         }}
       >
-        <DndContext
-          onDragEnd={handleDragEndInternal}
-          onDragStart={onDragStart}
-        >
+        <DndContext onDragEnd={handleDragEndInternal} onDragStart={onDragStart}>
           <div
             ref={canvasRef}
-            className="relative"
+            className="relative bg-black border-1 border-white rounded-md"
             style={{
               width: `${canvasDimensions.width}px`,
               height: `${canvasDimensions.height}px`,
-              backgroundColor: '#000',
-              border: '4px solid #fff',
               transform: `scale(${zoom})`,
-              transformOrigin: 'top left',
-              backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+              transformOrigin: "top left",
+              backgroundImage:
+                "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
               backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
             }}
             onClick={(e) => {
@@ -122,18 +136,6 @@ export function EditorCanvas({
                 onSelect={() => onSelectComponent(component.id)}
               />
             ))}
-
-            {/* Empty State */}
-            {components.length === 0 && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center p-8 border-4 border-dashed border-white bg-gray-800">
-                  <p className="font-bold text-xl mb-2 text-white">No components yet</p>
-                  <p className="text-sm text-gray-400">
-                    Add components from the sidebar to get started
-                  </p>
-                </div>
-              </div>
-            )}
           </div>
         </DndContext>
       </div>

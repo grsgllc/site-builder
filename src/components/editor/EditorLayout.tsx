@@ -5,6 +5,7 @@ import { EditorToolbar } from "./EditorToolbar";
 import { ComponentSidebar } from "./ComponentSidebar";
 import { EditorCanvas } from "./EditorCanvas";
 import { PropertiesPanel } from "./PropertiesPanel";
+import { EditorFooter } from "./EditorFooter";
 import { FaChevronLeft } from "react-icons/fa";
 import { TbBackground } from "react-icons/tb";
 import { FiPlus } from "react-icons/fi";
@@ -14,14 +15,18 @@ interface EditorLayoutProps {
   user?: any;
 }
 
-export function EditorLayout({ site, user }: EditorLayoutProps = { site: null, user: null }) {
+export function EditorLayout(
+  { site, user }: EditorLayoutProps = { site: null, user: null }
+) {
   const [selectedComponent, setSelectedComponent] = useState<string | null>(
     null
   );
   const [components, setComponents] = useState<any[]>([]);
   //const [page, setPage] = useState(site.pages[0]);
   const [isDragging, setIsDragging] = useState(false);
-  const [viewportMode, setViewportMode] = useState<'mobile' | 'desktop'>('mobile');
+  const [viewportMode, setViewportMode] = useState<"mobile" | "desktop">(
+    "mobile"
+  );
   const [zoom, setZoom] = useState(1);
 
   /* useEffect(() => {
@@ -60,7 +65,10 @@ export function EditorLayout({ site, user }: EditorLayoutProps = { site: null, u
     }
   };
 
-  const handleDragEnd = (componentId: string, delta: { x: number; y: number }) => {
+  const handleDragEnd = (
+    componentId: string,
+    delta: { x: number; y: number }
+  ) => {
     const component = components.find((c) => c.id === componentId);
     if (component) {
       handleUpdateComponent(componentId, {
@@ -77,7 +85,7 @@ export function EditorLayout({ site, user }: EditorLayoutProps = { site: null, u
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-screen">
       <EditorToolbar />
       <EditorCanvas
         components={components}
@@ -90,6 +98,7 @@ export function EditorLayout({ site, user }: EditorLayoutProps = { site: null, u
         onDragEnd={handleDragEnd}
         onZoomChange={setZoom}
       />
+      <EditorFooter zoom={zoom} onZoomChange={setZoom} />
     </div>
   );
 }
